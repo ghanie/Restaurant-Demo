@@ -43,8 +43,12 @@ namespace OdeToFood.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(RestaurantEditModel model)
         {
+            if (!ModelState.IsValid)
+                return View();
+
             var newRestaurant = new Restaurant 
                 {
                     Name = model.Name, 
