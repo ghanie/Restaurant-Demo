@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OdeToFood.Models;
 using OdeToFood.Services;
 using OdeToFood.ViewModels;
@@ -6,7 +7,7 @@ using OdeToFood.ViewModels;
 
 namespace OdeToFood.Controllers
 {
-
+    [Authorize]
     public class HomeController : Controller
     {
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
@@ -17,6 +18,7 @@ namespace OdeToFood.Controllers
             _restaurantData = restaurantData;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var model = new HomeIndexViewModel
@@ -26,6 +28,7 @@ namespace OdeToFood.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
         public IActionResult Details(int id)
         {
             var model = _restaurantData.Get(id);

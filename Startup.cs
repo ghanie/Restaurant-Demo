@@ -1,14 +1,17 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using OdeToFood.Data;
 using OdeToFood.Services;
-using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 
 
 namespace OdeToFood
@@ -27,6 +30,18 @@ namespace OdeToFood
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+            .AddOpenIdConnect(options =>
+            {
+                _configuration.Bind("AzureAd",options);
+            })
+            .AddCookie();
+
+
             // Add Db Service to Configurations and pass connectionString through GetConnectionString property in _configuration
             services.AddDbContext<OdeToFoodDbContext>(
                 options=>options.UseSqlServer(_configuration.GetConnectionString("OdeToFood")));
@@ -46,6 +61,11 @@ namespace OdeToFood
             }
 
             app.UseRouting();
+
+            app.UseRewriter(new RewriteOptions()
+                                  .AddRedirectToHttpsPermanent());
+
+            app.UseAuthentication();
             
             app.UseMvc(ConfigureRoutes);
 
