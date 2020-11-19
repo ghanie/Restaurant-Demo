@@ -5,11 +5,15 @@
 }
 <h1>All Restaurants</h1>
 
+<div>
+    <a class="btn btn-primary" asp-action="Create">Add Restaurant</a>
+</div>
+
+<div></div>
+
 @foreach (var restaurant in Model.Restaurants)
 {
     @await Html.PartialAsync("_Summary", restaurant)
 }
 
-<div>
-    <a asp-action="Create">Add Restaurant</a>
-</div>
+

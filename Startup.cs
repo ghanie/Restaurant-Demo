@@ -11,7 +11,6 @@ using OdeToFood.Data;
 using OdeToFood.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 
 
 namespace OdeToFood
@@ -61,6 +60,8 @@ namespace OdeToFood
             }
 
             app.UseRouting();
+
+            app.UseNodeModules(env.ContentRootPath);
 
             app.UseRewriter(new RewriteOptions()
                                   .AddRedirectToHttpsPermanent());
