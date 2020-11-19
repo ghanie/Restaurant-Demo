@@ -1,0 +1,17 @@
+﻿@model Restaurant
+
+
+<section>
+
+    <h1>@Model.Name</h1>
+    
+    <div>
+        @Model.Cuisine
+    </div>
+    
+    <div>
+        <a asp-action="Details" asp-route-id="@Model.Id"> Details</a>
+        <a asp-page="/Restaurants/Edit" asp-route-id="@Model.Id"> Edit</a>
+    </div>
+
+</section>
